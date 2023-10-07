@@ -8,12 +8,13 @@ import {
   Text,
   View,
 } from "react-native";
-import { GeneralColors } from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 
-const ImagePickerComp = () => {
-  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+import { GeneralColors } from "../constants/colors";
+
+const ImagePickerComp = ({ onSelectImage }) => {
+  const [status, requestPermission] = ImagePicker.useCameraPermissions();
   const [imageUri, setImageUri] = useState("");
 
   const verifyPermissions = async () => {
@@ -50,13 +51,13 @@ const ImagePickerComp = () => {
         return;
       }
 
-      const image = await ImagePicker.launchImageLibraryAsync({
+      const image = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [4, 3],
         quality: 0.5,
       });
       setImageUri(image.assets[0].uri);
-      console.log(image.assets[0].uri);
+      onSelectImage(image.assets[0].uri);
     } catch (error) {
       console.log(error);
     }
